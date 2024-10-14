@@ -12,7 +12,7 @@ const rl = readline.createInterface({
 const userName = getUsernameFromArgs()
 
 
-const greetingUser = (userName) => {
+const greetingUser = () => {
     console.log(`Welcome to the File Manager, ${userName}!`)
     if (userName === 'Anon') {
         console.log("You can provide your username by '--username=yourName'")
@@ -25,9 +25,13 @@ const adieuUser = () => {
 }
 
 greetingUser()
+rl.prompt()
 rl.on('line', async (chunk) => {
     const input = chunk.toString().trim();
-    console.log(`Received: ${chunk}`);
+    const [command, ...args] = input.split(' ');
+    console.log(`Received command: ${command}\nReceived args: ${args}`);
+    (command === '.exit') && rl.close();
+    rl.prompt()
 }).on('close', adieuUser);
 
 
