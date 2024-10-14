@@ -1,8 +1,12 @@
-import {normalize, resolve} from "path";
+import {normalize, resolve, dirname} from "path";
 import fs from "fs/promises";
+import {mkdir} from 'fs/promises'
 import {cwd} from "node:process";
-import {createReadStream} from 'fs';
+import {createReadStream, createWriteStream} from 'fs';
 import * as crypto from "node:crypto";
+import {existsSync} from 'node:fs';
+import {pipeline} from "stream/promises";
+
 
 export const touchFile = async (fileName) => {
     const normalizedFileName = normalize(fileName);
@@ -53,4 +57,48 @@ export const catFile = async (filePath) => {
     });
     readableStream.on('end', () => {
     });
+};
+
+export const renameFile = async (oldPath, newPath) => {
+    try {
+        await fs.rename(resolve(cwd(), normalize(oldPath)), resolve(cwd(), normalize(newPath)));
+        console.log(`File renamed to ${newPath}.`);
+    } catch {
+        console.error('Operation failed.')
+    }
+};
+
+export const copyFile = async (sourcePath, destPath) => {
+  const source = resolve(cwd(), normalize(sourcePath));
+  const destination = resolve(cwd(), normalize(destPath));
+
+  const destDir = dirname(destination);
+
+  if (!existsSync(destDir)) {
+    await mkdir(destDir, {recursive: true});
+  }
+
+  const readableStream = createReadStream(source);
+  const writableStream = createWriteStream(destination);
+
+  await pipeline(readableStream, writableStream);
+  console.log(`File copied to ${destination}.`);
+};
+
+
+export const moveFile = async (sourcePath, destPath) => {
+  const source = resolve(cwd(), normalize(sourcePath));
+  const destination = resolve(cwd(), normalize(destPath));
+
+  const destDir = dirname(destination);
+
+  if (!existsSync(destDir)) {
+    await mkdir(destDir, {recursive: true});
+  }
+  const readableStream = createReadStream(source);
+  const writableStream = createWriteStream(destination);
+
+  await pipeline(readableStream, writableStream);
+  console.log(`File moved to ${destination}.`);
+  await removeFile(source);
 };
