@@ -1,7 +1,8 @@
 import {getArch, getCpuInfo, getEOL, getHomeDir, getUsernameFromOs} from "./os/commands.js";
 import {cd, ls, up} from "./fs/navigate.js";
 import {checkArgsCount} from "./cli/args.js";
-import {calculateHash, removeFile, touchFile} from "./fs/fileOperations.js";
+import {calculateHash, catFile, removeFile, touchFile} from "./fs/fileOperations.js";
+import {compressFile, decompressFile} from "./brotli/index.js";
 
 export const commandList = {
   'os --EOL': getEOL,
@@ -25,7 +26,7 @@ export const commandList = {
   cat: async (args = []) => {
     if (!checkArgsCount(args, 1)) return;
     const [filePath] = args;
-    await readFileAndPrint(filePath);
+    await catFile(filePath);
   },
 
   add: async (args = []) => {

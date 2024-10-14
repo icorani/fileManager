@@ -1,7 +1,6 @@
 import {normalize, resolve} from "path";
 import fs from "fs/promises";
 import {cwd} from "node:process";
-import {getCurrentDirectory} from "./dirs.js";
 import {createReadStream} from 'fs';
 import * as crypto from "node:crypto";
 
@@ -41,4 +40,17 @@ export const calculateHash = async (filePath) => {
     } catch (err) {
         console.error('Operation failed')
     }
+};
+
+export const catFile = async (filePath) => {
+    const readableStream = createReadStream(resolve(cwd(), normalize(filePath)), {encoding: 'utf-8'});
+
+    readableStream.on('data', (chunk) => {
+        console.log('\n' + chunk);
+    });
+    readableStream.on('error', () => {
+        console.error('Operation failed');
+    });
+    readableStream.on('end', () => {
+    });
 };
