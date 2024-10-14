@@ -1,7 +1,7 @@
 import {getArch, getCpuInfo, getEOL, getHomeDir, getUsernameFromOs} from "./os/commands.js";
 import {cd, ls, up} from "./fs/navigate.js";
 import {checkArgsCount} from "./cli/args.js";
-import {calculateHash, catFile, removeFile, touchFile, renameFile, copyFile} from "./fs/fileOperations.js";
+import {calculateHash, catFile, removeFile, touchFile, renameFile, copyFile, moveFile} from "./fs/fileOperations.js";
 import {compressFile, decompressFile} from "./brotli/index.js";
 
 export const commandList = {
