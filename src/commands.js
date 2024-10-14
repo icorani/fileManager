@@ -41,13 +41,13 @@ export const commandList = {
         await renameFile(oldPath, newFileName);
     },
 
-    cp: async (args = []) => {
+    async cp(args = []) {
         if (!checkArgsCount(args, 2)) return;
         const [sourcePath, destPath] = args;
         await copyFile(sourcePath, destPath);
     },
 
-    mv: async (args = []) => {
+    async mv(args = []) {
         if (!checkArgsCount(args, 2)) return;
         const [sourcePath, destPath] = args;
         await moveFile(sourcePath, destPath);
